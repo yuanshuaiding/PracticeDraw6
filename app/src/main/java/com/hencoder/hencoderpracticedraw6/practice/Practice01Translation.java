@@ -3,6 +3,7 @@ package com.hencoder.hencoderpracticedraw6.practice;
 import android.content.Context;
 import android.graphics.Outline;
 import android.graphics.Path;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -21,6 +22,9 @@ import static com.hencoder.hencoderpracticedraw6.Utils.dpToPixel;
 public class Practice01Translation extends RelativeLayout {
     Button animateBt;
     ImageView imageView;
+    private Typeface typeFace;
+    int clickCount = 0;
+    int maxCount = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 6 : 4;
 
     public Practice01Translation(Context context) {
         super(context);
@@ -37,7 +41,7 @@ public class Practice01Translation extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
+        typeFace = Typeface.createFromAsset(getContext().getAssets(), "Satisfy-Regular.ttf");
         animateBt = (Button) findViewById(R.id.animateBt);
         imageView = (ImageView) findViewById(R.id.imageView);
         if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
@@ -49,6 +53,33 @@ public class Practice01Translation extends RelativeLayout {
             @Override
             public void onClick(final View v) {
                 // TODO 在这里处理点击事件，通过 View.animate().translationX/Y/Z() 来让 View 平移
+                switch (clickCount) {
+                    case 0:
+                        imageView.animate().translationX(dpToPixel(150));
+                        break;
+                    case 1:
+                        imageView.animate().translationX(0);
+                        break;
+                    case 2:
+                        imageView.animate().translationY(dpToPixel(100));
+                        break;
+                    case 3:
+                        imageView.animate().translationY(0);
+                        break;
+                    case 4:
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+                            imageView.animate().translationZ(dpToPixel(20));
+                        }
+                        break;
+                    case 5:
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+                            imageView.animate().translationZ(0);
+                        }
+                        break;
+                }
+                clickCount++;
+                if (clickCount >= maxCount)
+                    clickCount = 0;
             }
         });
     }
